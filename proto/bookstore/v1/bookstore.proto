@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package bookstore.v1;
+
+option go_package = "bookstore/v1";
+
+import "gorm.proto";
+
+message EchoRequest {
+  string data = 1;
+}
+
+message EchoResponse {
+  string data = 1;
+}
+
+service HelloService {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}
+
+service BookStoreService {
+  rpc Create(CreateRequest) returns (CreateResponse);
+}
+
+message Book {
+  option (gorm.opts) = {
+    orm: true,
+    table: "my_book",
+  };
+  fixed64 id = 1;
+  string title = 2;
+  optional int32 title_cn = 3;
+  repeated string tags = 4 [(gorm.field).tag = {column: "my_tags"}];
+}
+
+message CreateRequest {
+  Book book = 1;
+}
+
+message CreateResponse {}

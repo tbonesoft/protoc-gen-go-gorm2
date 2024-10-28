@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package gorm;
+
+option go_package = "github.com/tbonesoft/protoc-gen-go-gorm2;gorm";
+
+import "google/protobuf/descriptor.proto";
+
+// Field level specifications
+extend google.protobuf.FieldOptions {
+  // Why protoc-gen-gorm assign it to 52119?
+  // https://github.com/infobloxopen/protoc-gen-gorm/blob/main/proto/options/gorm.proto#L14
+  optional GormFieldOptions field = 52119;
+}
+
+message GormFieldOptions {
+  optional GormTag tag = 1;
+}
+
+// ref: https://gorm.io/docs/models.html#Fields-Tags
+message GormTag {
+  optional string column = 1;
+  optional string type = 2;
+  optional string serializer = 3;
+  optional int32 size = 4;
+  optional bool primary_key = 5;
+
+  optional bool unique = 6;
+  optional string default = 7;
+
+  // NUMERIC(precision, scale) in PostgreSQL
+  // ref: https://www.postgresql.org/docs/17/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL
+  optional int32 precision = 8;
+  optional int32 scale = 9;
+
+  optional bool not_null = 10;
+
+  optional bool auto_increment = 11;
+  optional string auto_increment_increment = 12;
+  optional bool embedded = 13;
+  optional string embedded_prefix = 14;
+  optional string auto_update_time = 15;
+
+  optional string unique_index = 16;
+  optional string index = 17;
+  optional string check = 18;
+}
+
+// Validation rules applied at the message level
+extend google.protobuf.MessageOptions {
+  // orm=true will cause orm code to be generated for this message/object
+  optional GormMessageOptions opts = 52119;
+}
+
+message GormMessageOptions {
+  bool orm = 1;
+  optional string table = 2;
+}
