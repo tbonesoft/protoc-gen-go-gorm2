@@ -1,0 +1,14 @@
+version: v2
+
+managed:
+  enabled: true
+  override:
+    - file_option: go_package
+      value: github.com/tbonesoft/protoc-gen-go-gorm2/proto/gorm/v1
+
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.31.0
+    out: proto/
+    opt: paths=source_relative
+inputs:
+  - directory: proto/

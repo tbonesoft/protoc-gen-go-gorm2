@@ -1,0 +1,23 @@
+# For details on buf.yaml configuration, visit https://buf.build/docs/configuration/v2/buf-yaml
+version: v2
+
+lint:
+  use:
+    - STANDARD
+  ignore:
+    - proto/bookstore/v1/bookstore.proto
+
+breaking:
+  use:
+    - FILE
+  ignore:
+    - proto/bookstore/v1/bookstore.proto
+
+modules:
+  - path: proto/
+    name: buf.build/tbonesoft/protoc-gen-go-gorm2
+
+  - path: examples/bookstore/proto/
+
+deps:
+  - buf.build/tbonesoft/protoc-gen-go-gorm2
