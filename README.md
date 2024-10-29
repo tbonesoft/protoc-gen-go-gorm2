@@ -13,7 +13,7 @@ Usage
 
 - [Get the Protocol Buffers compiler](https://github.com/protocolbuffers/protobuf?tab=readme-ov-file#protobuf-compiler-installation);
 - Get the golang GORM code generator: `go install github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2@latest`
-- Define proto file likes examples/bookstore/proto/bookstore/v1/bookstore.proto
+- Define a proto file likes proto/bookstore/v1/bookstore.proto
 - Compile it:
 
 ```
