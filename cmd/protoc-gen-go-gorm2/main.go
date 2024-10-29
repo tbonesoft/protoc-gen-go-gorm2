@@ -22,10 +22,10 @@ import (
 	"google.golang.org/protobuf/types/pluginpb"
 	"gorm.io/gorm/schema"
 
-	"protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2/internal_gengo"
-	"protoc-gen-go-gorm2/internal/editionssupport"
-	"protoc-gen-go-gorm2/internal/version"
-	gorm "protoc-gen-go-gorm2/proto/gorm/v1"
+	"github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2/internal_gengo"
+	"github.com/tbonesoft/protoc-gen-go-gorm2/internal/editionssupport"
+	"github.com/tbonesoft/protoc-gen-go-gorm2/internal/version"
+	gorm "github.com/tbonesoft/protoc-gen-go-gorm2/proto/gorm/v1"
 )
 
 const genGoDocURL = "https://github.com/tbonesoft/protoc-gen-go-gorm2"

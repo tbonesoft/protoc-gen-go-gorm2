@@ -12,7 +12,7 @@ import (
 
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	"protoc-gen-go-gorm2/internal/encoding/defval"
+	"github.com/tbonesoft/protoc-gen-go-gorm2/internal/encoding/defval"
 )
 
 // Marshal encodes the protoreflect.FieldDescriptor as a tag.

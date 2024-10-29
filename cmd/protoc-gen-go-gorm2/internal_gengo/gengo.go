@@ -15,7 +15,7 @@ import (
 	"google.golang.org/protobuf/runtime/protoimpl"
 	"google.golang.org/protobuf/types/descriptorpb"
 
-	"protoc-gen-go-gorm2/internal/encoding/tag"
+	"github.com/tbonesoft/protoc-gen-go-gorm2/internal/encoding/tag"
 )
 
 // FieldGoType returns the Go type used for a field.

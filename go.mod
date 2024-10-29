@@ -1,4 +1,4 @@
-module protoc-gen-go-gorm2
+module github.com/tbonesoft/protoc-gen-go-gorm2
 
 go 1.22.2
 
