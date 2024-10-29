@@ -10,5 +10,6 @@ plugins:
   - remote: buf.build/protocolbuffers/go:v1.31.0
     out: proto/
     opt: paths=source_relative
+
 inputs:
   - directory: proto/

@@ -32,7 +32,9 @@ jobs:
         setup_only: true
 
     - name: Build protoc-gen-go-gorm2
-      run: buf generate
+      run: |
+        go install -v github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2
+        buf generate
 
     - name: Build bookstore
       run: buf generate --template buf.gen.bookstore.yaml
