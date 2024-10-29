@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package gorm.v1;
 
-option go_package = "github.com/tbonesoft/protoc-gen-go-gorm2;gorm";
+option go_package = "github.com/tbonesoft/protoc-gen-go-gorm2/proto/gorm/v1";
 
 import "google/protobuf/descriptor.proto";
 
