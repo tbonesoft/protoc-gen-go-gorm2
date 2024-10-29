@@ -4,7 +4,7 @@ package bookstore.v1;
 
 option go_package = "bookstore/v1";
 
-import "gorm.proto";
+import "gorm/v1/gorm.proto";
 
 message EchoRequest {
   string data = 1;
@@ -23,14 +23,14 @@ service BookStoreService {
 }
 
 message Book {
-  option (gorm.opts) = {
+  option (gorm.v1.opts) = {
     orm: true,
     table: "my_book",
   };
   fixed64 id = 1;
   string title = 2;
   optional int32 title_cn = 3;
-  repeated string tags = 4 [(gorm.field).tag = {column: "my_tags"}];
+  repeated string tags = 4 [(gorm.v1.field).tag = {column: "my_tags"}];
 }
 
 message CreateRequest {

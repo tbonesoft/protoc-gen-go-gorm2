@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
@@ -24,7 +25,7 @@ import (
 	"protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2/internal_gengo"
 	"protoc-gen-go-gorm2/internal/editionssupport"
 	"protoc-gen-go-gorm2/internal/version"
-	gorm "protoc-gen-go-gorm2/proto"
+	gorm "protoc-gen-go-gorm2/proto/gorm/v1"
 )
 
 const genGoDocURL = "https://github.com/tbonesoft/protoc-gen-go-gorm2"
@@ -285,6 +286,8 @@ func fieldGormTagValue(field *protogen.Field, tags *gorm.GormTag) (rs string) {
 	if notNull {
 		value += "not null;"
 	}
+
+	value = strings.TrimRight(value, ";")
 
 	// TODO: part 3
 	return value

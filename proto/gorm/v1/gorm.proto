@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package gorm;
+package gorm.v1;
 
 option go_package = "github.com/tbonesoft/protoc-gen-go-gorm2;gorm";
 
