@@ -7,7 +7,7 @@ Features
 - [x] Support modern toolchain: Go v1.22 or newer, Protocol Buffers v3;
 - [x] Go field decorators/tags can be defined by option in the .proto file for GORM;
 - [x] No force conventions;
-- [ ] Converters between PB version and ORM version of the objects are included.
+- [x] Converters between PB version and ORM version of the objects are included.
 
 Usage
 
@@ -26,6 +26,11 @@ protoc ^
 --proto_path=proto/ ^
 proto/bookstore/v1/bookstore.proto
 ```
+
+TODO
+
+- more examples
+- 100% unit tests
 
 ## Notes on buf.build
 

@@ -37,6 +37,20 @@ const (
 	DB_ENGINE_POSTGRES
 )
 
+var (
+	// The value reference https://github.com/lib/pq/blob/master/array.go
+	MapGoType2PgDriverType = map[string]string{
+		"[]bool":    "pq.BoolArray",
+		"[]float64": "pq.Float64Array",
+		"[]float32": "pq.Float32Array",
+		"[]int64":   "pq.Int64Array",
+		"[]int32":   "pq.Int32Array",
+
+		"[]bytea":  "pq.ByteaArray", // ref: https://www.postgresql.org/docs/17/datatype-binary.html
+		"[]string": "pq.StringArray",
+	}
+)
+
 // SupportedFeatures reports the set of supported protobuf language features.
 var SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL | pluginpb.CodeGeneratorResponse_FEATURE_SUPPORTS_EDITIONS)
 
@@ -136,6 +150,7 @@ func (b *builder) GenerateFile(file *protogen.File) *protogen.GeneratedFile {
 		g.P("}")
 
 		b.genTableNameFunction(g, msg, opts)
+		b.genConvertFunctions(g, msg, opts, file)
 	}
 
 	return g
@@ -170,14 +185,76 @@ func (b *builder) genTableNameFunction(g *protogen.GeneratedFile, message *proto
 		tableName = value
 	}
 
-	g.P(`return "`, tableName, `"`)
+	g.P(`  return "`, tableName, `"`)
+	g.P(`}`)
+}
+
+func (b *builder) genConvertFunctions(g *protogen.GeneratedFile, message *protogen.Message, msgOpts *gorm.GormMessageOptions, file *protogen.File) {
+	b.genConvertFunctionToPB(g, message, msgOpts, file)
+	b.genConvertFunctionToORM(g, message, msgOpts, file)
+}
+
+func (b *builder) genConvertFunctionToPB(g *protogen.GeneratedFile, message *protogen.Message, msgOpts *gorm.GormMessageOptions, file *protogen.File) {
+	g.P(``)
+	g.P(`func (x *`, message.GoIdent, `ORM) ToPB (ctx `, generateImport("Context", "context", g), `) (rs *`, message.GoIdent, `, err error) {`)
+	g.P(`  rs = &`, message.GoIdent, `{}`)
+	g.P(``)
+
+	for _, field := range message.Fields {
+		if !field.Desc.IsList() && !field.Desc.IsMap() {
+			g.P(`rs.`, field.GoName, ` = x.`, field.GoName)
+		} else {
+			g.P(``)
+			g.P(`  if x.`, field.GoName, ` != nil {`)
+
+			goType := b.fieldGoType(g, file, field)
+			g.P(`    rs.`, field.GoName, ` = make(`, goType, `, len(x.`, field.GoName, `))`)
+			g.P(`    copy(rs.`, field.GoName, `, x.`, field.GoName, `)`)
+
+			g.P(`  }`)
+			g.P(``)
+		}
+	}
+
+	g.P(``)
+	g.P(`  return rs, err`)
+	g.P(`}`)
+}
+
+func (b *builder) genConvertFunctionToORM(g *protogen.GeneratedFile, message *protogen.Message, msgOpts *gorm.GormMessageOptions, file *protogen.File) {
+	g.P(``)
+	g.P(`func (x *`, message.GoIdent, `) ToORM (ctx `, generateImport("Context", "context", g), `) (rs *`, message.GoIdent, `ORM, err error) {`)
+	g.P(`  rs = &`, message.GoIdent, `ORM{}`)
+	g.P(``)
+
+	for _, field := range message.Fields {
+		if !field.Desc.IsList() && !field.Desc.IsMap() {
+			g.P(`  rs.`, field.GoName, ` = x.`, field.GoName)
+		} else {
+			g.P(``)
+			g.P(`  if x.`, field.GoName, ` != nil {`)
+
+			fieldOpts := parseFieldOptions(field)
+			gormTags := fieldOpts.GetTag()
+			goType := b.fieldGoType2DriverType(g, file, field, gormTags)
+			g.P(`    rs.`, field.GoName, ` = make(`, goType, `, len(x.`, field.GoName, `))`)
+			g.P(`    copy(rs.`, field.GoName, `, x.`, field.GoName, `)`)
+
+			g.P(`  }`)
+			g.P(``)
+		}
+	}
+
+	g.P(``)
+	g.P(`  return rs, err`)
 	g.P(`}`)
 }
 
 func (b *builder) genMessageField(g *protogen.GeneratedFile, file *protogen.File, m *protogen.Message, field *protogen.Field) {
 	fieldOpts := parseFieldOptions(field)
 	gormTags := fieldOpts.GetTag()
-	goType := b.ParseFieldGoType(g, file, field, gormTags)
+
+	goType := b.fieldGoType2DriverType(g, file, field, gormTags)
 
 	var tags internal_gengo.StructTags
 	gormTagValue := fieldGormTagValue(field, gormTags)
@@ -196,41 +273,29 @@ func (b *builder) genMessageField(g *protogen.GeneratedFile, file *protogen.File
 		internal_gengo.TrailingComment(field.Comments.Trailing))
 }
 
-// ref: https://github.com/lib/pq/blob/master/array.go
-const (
-	PG_BOOL_ARRAY    = "pq.BoolArray"
-	PG_FLOAT64_ARRAY = "pq.Float64Array"
-	PG_FLOAT32_ARRAY = "pq.Float32Array"
-	PG_INT64_ARRAY   = "pq.Int64Array"
-	PG_INT32_ARRAY   = "pq.Int32Array"
-
-	PG_BYTEA_ARRAY  = "pq.ByteaArray" // ref: https://www.postgresql.org/docs/17/datatype-binary.html
-	PG_STRING_ARRAY = "pq.StringArray"
-)
-
 const (
 	PQ_IMPORT = "github.com/lib/pq"
 )
 
-func (it *builder) ParseFieldGoType(g *protogen.GeneratedFile, file *protogen.File, field *protogen.Field, tags *gorm.GormTag) (rs string) {
+func (it *builder) fieldGoType2DriverType(g *protogen.GeneratedFile, file *protogen.File, field *protogen.Field, tags *gorm.GormTag) (rs string) {
 	goType, pointer := internal_gengo.FieldGoType(g, file, field)
 
 	if it.dbEngine == DB_ENGINE_POSTGRES {
-		mapGoType2PgDriverType := map[string]string{
-			"[]bool":    PG_BOOL_ARRAY,
-			"[]float64": PG_FLOAT64_ARRAY,
-			"[]float32": PG_FLOAT32_ARRAY,
-			"[]int64":   PG_INT64_ARRAY,
-			"[]int32":   PG_INT32_ARRAY,
-			"[]bytea":   PG_BYTEA_ARRAY,
-			"[]string":  PG_STRING_ARRAY,
-		}
-
-		if pgDriverType, ok := mapGoType2PgDriverType[goType]; ok {
+		if pgDriverType, ok := MapGoType2PgDriverType[goType]; ok {
 			goType = pgDriverType
 			generateImport(pgDriverType, PQ_IMPORT, g)
 		}
 	}
+
+	if pointer {
+		goType = "*" + goType
+	}
+
+	return goType
+}
+
+func (it *builder) fieldGoType(g *protogen.GeneratedFile, file *protogen.File, field *protogen.Field) (rs string) {
+	goType, pointer := internal_gengo.FieldGoType(g, file, field)
 
 	if pointer {
 		goType = "*" + goType
