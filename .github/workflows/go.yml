@@ -24,9 +24,6 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
-
     - uses: bufbuild/buf-action@v1
       with:
         setup_only: true
@@ -38,3 +35,6 @@ jobs:
 
     - name: Build bookstore
       run: buf generate --template buf.gen.bookstore.yaml
+
+    - name: Test
+      run: go test -v ./...
