@@ -22,3 +22,6 @@ build-examples:
 	--proto_path=proto/ \
 	proto/gorm/v1/gorm.proto \
 	examples/bookstore/proto/bookstore/v1/bookstore.proto
+
+push-bsr:
+	buf push buf.build/tbonesoft/protoc-gen-go-gorm2

@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: bufbuild/buf-action@v1
+      - uses: bufbuild/buf-setup-action@v1.46.0
         with:
-          setup_only: true
+          version: 1.46.0
 
       - name: Generate code for protoc-gen-go-gorm2
         run: buf generate
@@ -30,7 +30,7 @@ jobs:
       - name: Build bookstore
         run: |
           go install -v github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2
-          buf generate --template buf.gen.bookstore.yaml proto/
+          buf generate --template buf.gen.bookstore.yaml
 
       - name: Build
         run: go build -v ./...
