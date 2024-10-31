@@ -3,8 +3,11 @@ version: v2
 managed:
   enabled: true
 
+  disable:
+    - module: buf.build/tbonesoft/protoc-gen-go-gorm2
+
 plugins:
-  - remote: buf.build/protocolbuffers/go:v1.31.0
+  - remote: buf.build/protocolbuffers/go:v1.35.1
     out: gen/
     opt: paths=source_relative
 
@@ -15,4 +18,4 @@ plugins:
       - engine=postgres
 
 inputs:
-  - directory: proto/
+  - directory: examples/bookstore/proto/
