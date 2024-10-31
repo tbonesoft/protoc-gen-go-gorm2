@@ -30,7 +30,8 @@ message Book {
   fixed64 id = 1;
   string title = 2;
   optional int32 title_cn = 3;
-  repeated string tags = 4 [(gorm.v1.field).tag = {column: "my_tags"}];
+  repeated string tags = 4 [(gorm.v1.field).tag = { column: "my_tags" }];
+  bytes note = 5;
 }
 
 message CreateRequest {

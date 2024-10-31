@@ -194,6 +194,9 @@ func (b *builder) genConvertFunctions(g *protogen.GeneratedFile, message *protog
 	b.genConvertFunctionToORM(g, message, msgOpts, file)
 }
 
+// The type `[]byte` could not be copy value via assign statement, we use `make(...)“ and `copy(...)` instead.`
+const typeBytes = `[]byte`
+
 func (b *builder) genConvertFunctionToPB(g *protogen.GeneratedFile, message *protogen.Message, msgOpts *gorm.GormMessageOptions, file *protogen.File) {
 	g.P(``)
 	g.P(`func (x *`, message.GoIdent, `ORM) ToPB (ctx `, generateImport("Context", "context", g), `) (rs *`, message.GoIdent, `, err error) {`)
@@ -201,16 +204,16 @@ func (b *builder) genConvertFunctionToPB(g *protogen.GeneratedFile, message *pro
 	g.P(``)
 
 	for _, field := range message.Fields {
-		if !field.Desc.IsList() && !field.Desc.IsMap() {
+		goType := b.fieldGoType(g, file, field)
+		isTypeBytes := goType == typeBytes
+
+		if !field.Desc.IsList() && !field.Desc.IsMap() && !isTypeBytes {
 			g.P(`rs.`, field.GoName, ` = x.`, field.GoName)
 		} else {
 			g.P(``)
 			g.P(`  if x.`, field.GoName, ` != nil {`)
-
-			goType := b.fieldGoType(g, file, field)
 			g.P(`    rs.`, field.GoName, ` = make(`, goType, `, len(x.`, field.GoName, `))`)
 			g.P(`    copy(rs.`, field.GoName, `, x.`, field.GoName, `)`)
-
 			g.P(`  }`)
 			g.P(``)
 		}

@@ -29,6 +29,7 @@ proto/bookstore/v1/bookstore.proto
 
 TODO
 
+- support all PostgreSQL [data types](https://www.postgresql.org/docs/17/datatype.html)
 - more examples
 - 100% unit tests
 
