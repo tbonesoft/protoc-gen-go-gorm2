@@ -29,4 +29,4 @@ protoc ^
 --proto_path=examples/bookstore/proto/ ^
 --proto_path=proto/ ^
 proto/gorm/v1/gorm.proto ^
-proto/bookstore/v1/bookstore.proto
+example/bookstore/proto/bookstore/v1/bookstore.proto

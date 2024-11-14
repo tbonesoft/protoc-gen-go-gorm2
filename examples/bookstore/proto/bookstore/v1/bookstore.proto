@@ -30,7 +30,9 @@ message Book {
   fixed64 id = 1;
   string title = 2;
   optional int32 title_cn = 3;
-  repeated string tags = 4 [(gorm.v1.field).tag = { column: "my_tags" }];
+  // NOTICE:
+  // It have to custom gorm type tag here, or you will get error 'gorm [error] unsupported data type: &[]' in runtime.
+  repeated string tags = 4 [(gorm.v1.field).tag = { type: "text[]", column: "my_tags" }];
   bytes note = 5;
 }
 
