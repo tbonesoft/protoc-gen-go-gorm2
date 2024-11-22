@@ -30,3 +30,6 @@ gen/
 
 # Protocol Buffers generated codes
 *.pb.go
+
+# node.js
+node_modules/

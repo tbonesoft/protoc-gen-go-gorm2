@@ -33,6 +33,21 @@ TODO
 - more examples
 - 100% unit tests
 
+## Examples
+
+Generate code for Go backend
+
+```
+go install -v github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2
+buf generate --template buf.gen.bookstore.yaml
+```
+
+Generate code for frontend
+
+```
+npx buf generate --template buf.gen.bookstore.frontend.yaml
+```
+
 ## Notes on buf.build
 
 As of buf v2, buf does not support setting different output directories for generated code for multiple modules, for example:
