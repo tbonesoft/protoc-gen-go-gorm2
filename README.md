@@ -13,7 +13,7 @@ Usage
 
 - [Get the Protocol Buffers compiler](https://github.com/protocolbuffers/protobuf?tab=readme-ov-file#protobuf-compiler-installation);
 - Get the golang GORM code generator: `go install github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2@latest`
-- Define a proto file likes proto/bookstore/v1/bookstore.proto
+- Define a proto file likes example/bookstore/proto/bookstore/v1/bookstore.proto
 - Compile it:
 
 ```
@@ -24,7 +24,7 @@ protoc ^
 --go-gorm2_opt=paths=source_relative ^
 --go-gorm2_opt=engine=postgres ^
 --proto_path=proto/ ^
-proto/bookstore/v1/bookstore.proto
+example/bookstore/proto/bookstore/v1/bookstore.proto
 ```
 
 TODO
@@ -32,6 +32,21 @@ TODO
 - support all PostgreSQL [data types](https://www.postgresql.org/docs/17/datatype.html)
 - more examples
 - 100% unit tests
+
+## Examples
+
+Generate code for Go backend
+
+```
+go install -v github.com/tbonesoft/protoc-gen-go-gorm2/cmd/protoc-gen-go-gorm2
+buf generate --template buf.gen.bookstore.yaml
+```
+
+Generate code for frontend
+
+```
+npx buf generate --template buf.gen.bookstore.frontend.yaml
+```
 
 ## Notes on buf.build
 
