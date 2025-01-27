@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/lib/pq v1.10.9
-	google.golang.org/protobuf v1.35.2
+	google.golang.org/protobuf v1.36.4
 	gorm.io/gorm v1.25.12
 )
 
