@@ -34,6 +34,13 @@ message Book {
   // It have to custom gorm type tag here, or you will get error 'gorm [error] unsupported data type: &[]' in runtime.
   repeated string tags = 4 [(gorm.v1.field).tag = { type: "text[]", column: "my_tags" }];
   bytes note = 5;
+
+  repeated Author authors = 6 [(gorm.v1.field).tag = { ignore: true }];
+}
+
+message Author {
+  string first_name = 1;
+  string last_name = 2;
 }
 
 message CreateRequest {

@@ -317,6 +317,11 @@ func generateImport(name string, importPath string, g *protogen.GeneratedFile) s
 func fieldGormTagValue(field *protogen.Field, tags *gorm.GormTag) (rs string) {
 	var value string
 
+	ignore := tags.GetIgnore()
+	if ignore {
+		return "-"
+	}
+
 	// part 1
 	column := tags.GetColumn()
 	if column != "" {

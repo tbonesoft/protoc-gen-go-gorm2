@@ -64,8 +64,3 @@ proto/gorm/v1/gorm.pb.go
 gen/bookstore/v1/bookstore.pb.go
 gen/bookstore/v1/bookstore_gorm.pb.go
 ```
-
-Request for improvement to official developers will not be accepted in 2024-10. See also
-
-- https://app.slack.com/client/TS9DC8PPX/CRZ680FUH
-- https://gist.github.com/kakuiho/0a8064b2626e9e352aab6b9afbba025d

@@ -164,3 +164,28 @@ func TestBook_ToORM(t *testing.T) {
 		})
 	}
 }
+
+func TestBookORM_TagNameIgnore(t *testing.T) {
+	tests := []struct {
+		name string
+		want string
+	}{
+		// TODO: Add test cases.
+		{
+			name: `set gorm tag name ignore to true`,
+			want: "-",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			x := &bookstore.BookORM{}
+
+			field, _ := reflect.TypeOf(x).Elem().FieldByName("Authors")
+			got := field.Tag.Get("gorm")
+
+			if got != tt.want {
+				t.Errorf("got %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
