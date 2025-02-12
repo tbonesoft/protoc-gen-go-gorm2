@@ -16,4 +16,4 @@ modules:
   - path: examples/bookstore/proto/
 
 deps:
-  - buf.build/tbonesoft/protoc-gen-go-gorm2:ab77d31411ad4b37b04027fcf031a1f3
+  - buf.build/tbonesoft/protoc-gen-go-gorm2:045fe5e625fb422bac1800aa95d2d6c2
