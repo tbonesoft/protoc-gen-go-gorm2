@@ -44,6 +44,8 @@ message GormTag {
   optional string unique_index = 16;
   optional string index = 17;
   optional string check = 18;
+
+  optional bool ignore = 19;
 }
 
 // Validation rules applied at the message level
