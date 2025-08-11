@@ -1,10 +1,10 @@
 module github.com/tbonesoft/protoc-gen-go-gorm2
 
-go 1.20
+go 1.22
 
 require (
 	github.com/lib/pq v1.10.9
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/protobuf v1.36.7
 	gorm.io/gorm v1.30.1
 )
 
