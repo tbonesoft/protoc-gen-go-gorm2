@@ -76,6 +76,22 @@ func TestBookORM_ToPB(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "test auto fill nil string array to empty slice",
+			fields: fields{
+				Id:    sampleBigIntId,
+				Title: "_title",
+			},
+			args: args{
+				ctx: context.TODO(),
+			},
+			wantRs: &bookstore.Book{
+				Id:    sampleBigIntId,
+				Title: "_title",
+				Tags:  []string{},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
