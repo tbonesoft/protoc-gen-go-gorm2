@@ -34,6 +34,11 @@ protoc ^
 example/bookstore/proto/bookstore/v1/bookstore.proto
 ```
 
+Options:
+
+- `engine`: accepts empty string `""` or `postgres`.
+- `auto_fill_nil_string_array`: defaults to `true`; generated `ToPB` methods convert nil repeated string fields to empty `[]string{}`. Use `auto_fill_nil_string_array=false` to preserve nil values.
+
 TODO
 
 - support all PostgreSQL [data types](https://www.postgresql.org/docs/17/datatype.html)
